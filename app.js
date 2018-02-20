@@ -1,6 +1,10 @@
 var express = require('express');
 var app = express();
+//get the access to the static camp ground data
+var campGrounds = require('./data/camp-grounds')
+
 var port = process.env.PORT || 3000;
+var ip = process.env.IP || '127.0.0.1';
 
 //set the path for the static assets
 app.use(express.static("public"));
@@ -9,19 +13,13 @@ app.use(express.static("public"));
 app.set("view engine","ejs");
 
 app.get('/',function(req,res) {
-	res.render('animal',{name :'Emet'});
+	res.render("index")
 });
 
-app.get('/camps/hello/:number',function(req,res) {
-	var times = req.params.number;
-	var helloStr ='';
-	for( var i=0; times > i;i++){
-		helloStr += 'hello '
-	}
-	res.send(`<h1> no of hello - ${helloStr} </h1>`)
-});
+app.get('/camp-grounds',function(req,res){
+	res.render("camp-grounds",{campGrounds:campGrounds})
+})
 
-
-app.listen(port,process.env.IP,() => {
+app.listen(port,ip,() => {
 	console.log(`Server started listening on port ${port}`);
 });
