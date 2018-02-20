@@ -9,7 +9,7 @@ var CampGrounds = [
 		name: 'Camp Three Campground',
 		location: 'California',
 		description: 'The Sequoia National Forest, named for the world’s largest trees, celebrates the greatest concentration of giant sequoia groves in the world. Protected within the Giant Sequoia National Monument, these groves and the areas around them are managed by the forest Service for you and the benefit of generations to come. These giants may be enjoyed as you hike, ride horse back or mountain bike one of many trails.',
-		image :'https://www.campsitephotos.com/photo/camp/46750/Camp_Three_River.jpg'
+		image :'https://www.campsitephotos.come/photo/camp/46750/Camp_Three_River.jpg'
 	}
 	,
 	{
