@@ -25,12 +25,11 @@ app.get('/camp-grounds',function(req,res){
 })
 
 app.post('/camp-grounds',function(req,res){
-	console.log(req.body);
+	campGrounds.push(req.body);
 	res.render("camp-grounds",{campGrounds:campGrounds})
 });
 
 app.get('/camp-grounds/add-camp',function(req,res) {
-
 	res.render('add-camp')
 });
 

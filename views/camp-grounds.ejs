@@ -1,12 +1,32 @@
 <%- include('partials/header') %>
-<h1>List of camp grounds ...</h1>
-<% campGrounds.forEach((campGround)=>{ %>
-	<div>
-		<h4><%=  campGround.name %></h4>
-		<img src="<%= campGround.image %>" width="250pix" alt="">
-		<p><%= campGround.description %></p>
-		<hr>
+<div class="container">
+	<header id="header" class="jumbotron">
+		<div class="container">
+			<h1>List of camp grounds ...</h1>
+			<p>View our exquisite list campgrounds.You will not find anywhere else.
+			</p>
+			<p>
+				<a class= "btn btn-lg btn-primary" href="/camp-grounds/add-camp" title="Add New Cam Ground">Add New Camp Ground</a>
+			</p>
+		</div>
+	</header><!-- /header -->
+	<div class="row">
+		<div class="col-lg-12">
+			<h3> Our Featured List of Camp Grounds </h3>
+		</div>
 	</div>
-<%});%>
+	<div class="row text-center" style="display: flex;flex-wrap: wrap;">
+		<% campGrounds.forEach((campGround)=>{ %>
+			<div class="col-md-3 col-sm-6">
+				<div class="thumbnail">
+					<img src="<%= campGround.image %>" width="250pix" alt="">
+					<div class="caption">
+						<h4><%=  campGround.name %></h4>
+					</div>
+				</div>
 
+			</div>
+		<%});%>
+	</div>
+</div>
 <%- include('partials/footer') %>
