@@ -1,12 +1,30 @@
 <%- include('partials/header') %>
-<h1>Create a New Camp Ground</h1>
-<form action="/camp-grounds" method="POST">
-	<input type="text" name="name" placeholder="Name of the camp ground .">
-	<input type="text" name="location" placeholder="City or Location Name !">
-	<input type="text" name="description" placeholder="Details of the location!">
-	<input type="text" name="image" placeholder="Image URL .">
-	<button type="submit">Add</button>
-</form>
-<a href="/camp-grounds" title="List of camp grounds">View Camp Grounds</a>
+<div class="container">
+	<div class="row">
+		<h1 style="text-align: center;">Create a New Camp Ground</h1>
+		<div style="width:30%; margin:25px auto;">
+			<form action="/camp-grounds" method="POST">
+				<div class="form-group">
+					<input class="form-control" type="text" name="name" placeholder="Name of the camp ground .">
+				</div>
+				<div class="form-group">
+					<input class="form-control" type="text" name="location" placeholder="City or Location Name !">
+				</div>
+				<div class="form-group">
+					<input class="form-control" type="text" name="description" placeholder="Details of the location!">
+				</div>
+				<div class="form-group">
+					<input class="form-control" type="text" name="image" placeholder="Image URL .">
+				</div>
+				<div class="form-group">
+				  <button class="btn btn-md btn-success btn-block" type="submit">Add
+				  </button>
+                </div>
+			</form>
+			<a href="/camp-grounds" title="List of camp grounds">View Camp Grounds</a>
+		</div>
+	</div>
+</div>
+
 
 <%- include('partials/footer') %>
