@@ -1,4 +1,8 @@
-var CampGrounds = [
+var mongoose = require("mongoose");
+var Campground = require("./models/campground");
+var Comment   = require("./models/comment");
+
+var data = [
 	{
 		name: 'Iron Creek Crawford State Park Campground',
 		location: 'Colorado',
@@ -31,7 +35,47 @@ var CampGrounds = [
 		description: 'Samuel P. Taylor State Park’s 2,882 acres offer shady strolls through the stately redwoods along Lagunitas Creek as well as exhilarating hikes to the top of Barnabe Peak, one of the best viewpoints in Marin County.You can camp among redwoods, bike along the creek, explore easy-to-moderate hiking trails, watch salmon spawn, relax in the shady picnic area, and learn the story of its namesake pioneer. When you’ve finished all that, more adventures await just next door at Point Reyes National Seashore.',
 		image :'https://www.protrails.com/protrails/galleries/oceanviews.jpg'
 	}
+];
 
-]
+function seedDB() {
+	//remove all existing data
+	Campground.remove({} ,function( error ){
+		if(error) {
+			console.log('Error in removing campgrounds ==>',error);
+		}
+		console.log('All campgrounds removed !!!!!');
+		 // Add model data to db
+		 data.forEach( function ( seed ) {
+		 	Campground.create( seed , function ( error ,newCamp ){
+		 		if( error ) {
+		 			console.log(error);
+		 		} else {
+		 			console.log(' campground added !!!!!');
+					Comment.create(
+					{
+						text: " This place is great . But no basic facilites .",
+						author: "Dasith"
+					}, function ( error ,comment) {
+						if( error ) {
+							console.log( 'Error in adding Comment -->', error);
+						}else {
+							newCamp.comments.push(comment._id);
+							newCamp.save();
+							console.log("Created new comment");
+						}
+					});
+		 		}
+			});
+		});
 
-module.exports = CampGrounds;
+	// Comment.remove({},function( error ){
+	// 	if( error ) {
+	// 		console.log(error);
+	// 	}
+	// 	console.log('All comments removed !!!!!');
+	// });
+
+});
+
+};
+module.exports = seedDB;
