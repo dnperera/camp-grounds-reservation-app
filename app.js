@@ -31,10 +31,10 @@ app.get('/camp-grounds',function(req,res){
 	//Get all camp grounds from DB
 	CampGround.find({} ,function( error, data){
 		if(error) {
-			res.render("camp-grounds",{campGrounds:[]});
+			res.render("campgrounds/index",{campGrounds:[]});
 			console.log(error);
 		}
-		res.render("index",{campGrounds:data})
+		res.render("campgrounds/index",{campGrounds:data})
 	});
 });
 
@@ -53,7 +53,7 @@ app.post('/camp-grounds',function(req,res){
 
 // Display the form  to create  new campground
 app.get('/camp-grounds/new',function(req,res) {
-	res.render('add-camp')
+	res.render('campgrounds/new')
 });
 
 //Display details of the selected campground
@@ -63,9 +63,24 @@ app.get('/camp-grounds/:id',function( req,res) {
 		if( error) {
 			console.log(error);
 		}else {
-			res.render('show',{campground:data});
+			res.render('campgrounds/show',{campground:data});
 		}
 	});
+});
+
+/* ----------------------------
+ User comments Routes 
+ -----------------------------
+ */
+app.get('/camp-grounds/:id/comments/new',function( req ,res ) {
+	//find campground by id
+	CampGround.findById(req.params.id,function( error , campground ){
+		if(error) {
+			console.log(error);
+		} else {
+			res.render( 'comments/new',{campground:campground});
+		}
+	})
 });
 
 app.listen(port,ip,() => {
