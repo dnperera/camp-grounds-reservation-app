@@ -5,17 +5,13 @@
 		<div style="width:30%; margin:25px auto;">
 			<form action="/camp-grounds/<%= campground._id %>/comments" method="POST">
 				<div class="form-group">
-					<input class="form-control" type="text" name="name" placeholder="Name of the camp ground .">
+					<input class="form-control" type="text" name="comment[text]" placeholder="Your comment .">
 				</div>
 				<div class="form-group">
-					<input class="form-control" type="text" name="location" placeholder="City or Location Name !">
+					<input class="form-control" type="text" name="comment[author]" placeholder="Author">
 				</div>
-				<div class="form-group">
-					<input class="form-control" type="text" name="description" placeholder="Details of the location!">
-				</div>
-				<div class="form-group">
-					<input class="form-control" type="text" name="image" placeholder="Image URL .">
-				</div>
+
+
 				<div class="form-group">
 				  <button class="btn btn-md btn-success btn-block" type="submit">Add
 				  </button>

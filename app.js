@@ -83,6 +83,27 @@ app.get('/camp-grounds/:id/comments/new',function( req ,res ) {
 	})
 });
 
+app.post('/camp-grounds/:id/comments/', function (req, res ){
+ //find campground by id
+ CampGround.findById(req.params.id,function( error , campground ){
+ 	if( error ) {
+ 		console.log(error);
+ 		res.redirect('/camp-grounds')
+ 	} else {
+ 		Comment.create(req.body.comment, function( error,comment ){
+ 			if(error) {
+ 				console.log(error);
+ 			}else{
+ 				campground.comments.push(comment._id);
+ 				campground.save();
+ 				res.redirect('/camp-grounds/'+campground._id);
+ 			}
+ 		});
+ 	}
+ })
+
+});
+
 app.listen(port,ip,() => {
 	console.log(`Server started listening on port ${port}`);
 });
