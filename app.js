@@ -90,6 +90,7 @@ app.post('/camp-grounds/:id/comments/', function (req, res ){
  		console.log(error);
  		res.redirect('/camp-grounds')
  	} else {
+ 		//create comment
  		Comment.create(req.body.comment, function( error,comment ){
  			if(error) {
  				console.log(error);
