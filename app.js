@@ -33,8 +33,15 @@ app.use(sessions({
 
 app.use(passport.initialize());
 app.use(passport.session());
+passport.use( new LocalStrategy( User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
+
+//add current user object to the express middle ware
+app.use( function ( req, res, next ){
+	res.locals.currentUser = req.user;
+	next();
+})
 
 //--- End Passport set up ----
 
@@ -50,7 +57,7 @@ app.get('/camp-grounds',function(req,res){
 			res.render("campgrounds/index",{campGrounds:[]});
 			console.log(error);
 		}
-		res.render("campgrounds/index",{campGrounds:data})
+		res.render("campgrounds/index",{campGrounds:data, currentUser:req.user})
 	});
 });
 
@@ -88,7 +95,7 @@ app.get('/camp-grounds/:id',function( req,res) {
  User comments Routes 
  -----------------------------
  */
-app.get('/camp-grounds/:id/comments/new',function( req ,res ) {
+app.get('/camp-grounds/:id/comments/new',isLoggedIn,function( req ,res ) {
 	//find campground by id
 	CampGround.findById(req.params.id,function( error , campground ){
 		if(error) {
@@ -99,7 +106,7 @@ app.get('/camp-grounds/:id/comments/new',function( req ,res ) {
 	})
 });
 
-app.post('/camp-grounds/:id/comments/', function (req, res ){
+app.post('/camp-grounds/:id/comments/',isLoggedIn, function (req, res ){
  //find campground by id
  CampGround.findById(req.params.id,function( error , campground ){
  	if( error ) {
@@ -142,8 +149,33 @@ app.post('/register',function( req,res ){
 	})
 
 });
+
+//show login page
+app.get('/login',function( req, res ) {
+	res.render('login');
+});
+
+//authenticate login details
+app.post('/login',passport.authenticate("local",
+	{
+		successRedirect: "/camp-grounds",
+		failureRedirect: "/login"
+	}),function(req, res ) {
+});
+
+app.get('/logout',function( req,res ){
+	req.logout();
+	res.redirect("/");
+});
 //--- End Authincation Routes
 
 app.listen(port,ip,() => {
 	console.log(`Server started listening on port ${port}`);
 });
+
+function isLoggedIn( req, res , next) {
+	if( req.isAuthenticated()) {
+		return next();
+	}
+	res.redirect("/login")
+}
