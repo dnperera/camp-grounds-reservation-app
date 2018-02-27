@@ -14,10 +14,10 @@ mongoose.connect('mongodb://localhost/camp_grounds');
 var port = process.env.PORT || 3000;
 var ip = process.env.IP || '127.0.0.1';
 
-app.use(bodyParser.urlencoded({extended:true}));
+(app.use(bodyParser.urlencoded({extended:true}));)
 
 //set the path for the static assets
-app.use(express.static("public"));
+app.use(express.static(__dirname+"/public"));
 
 //set the view Engine
 app.set("view engine","ejs");
