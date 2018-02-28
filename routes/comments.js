@@ -43,6 +43,42 @@ router.post('/',isLoggedIn, function (req, res ){
 
 });
 
+// Edit comment route
+router.get('/:comment_id/edit',function( req,res ){
+	Comment.findById(req.params.comment_id,function(error ,foundComment ){
+		if( error ) {
+			console.log(error);
+			res.redirect('back');
+		} else {
+			res.render('comments/edit',{campgroundId:req.params.id ,comment:foundComment});
+		}
+	})
+});
+
+//Update comment route
+router.put('/:comment_id',function( req,res ){
+	Comment.findByIdAndUpdate(req.params.comment_id,req.body.comment, function( error, updatedComment ){
+		if( error ) {
+			console.log(error);
+			res.redirect('back');
+		} else {
+			res.redirect('/camp-grounds/'+req.params.id);
+		}
+	});
+});
+
+//delete comment
+router.delete('/:comment_id',function(req,res) {
+	Comment.findByIdAndRemove(req.params.comment_id,function( error ){
+		if(error) {
+			console.log(error);
+			res.redirect('back');
+		} else {
+			res.redirect('/camp-grounds/'+req.params.id);
+		}
+	});
+});
+
 function isLoggedIn( req, res , next) {
 	if( req.isAuthenticated()) {
 		return next();
