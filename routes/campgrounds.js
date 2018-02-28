@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var CampGround = require('../models/campground');
+var middleware = require('../middleware');
 
 //Index route - display all camp grounds
 router.get('/',function(req,res){
@@ -15,7 +16,7 @@ router.get('/',function(req,res){
 });
 
 //Create new campground
-router.post('/',isLoggedIn,function(req,res){
+router.post('/',middleware.isLoggedIn,function(req,res){
 	//get data from form and campground object
 	var newCampGround ={
 		name: req.body.name,
@@ -40,7 +41,7 @@ router.post('/',isLoggedIn,function(req,res){
 });
 
 // Display the form  to create  new campground
-router.get('/new',isLoggedIn,function(req,res) {
+router.get('/new',middleware.isLoggedIn,function(req,res) {
 	res.render('campgrounds/new')
 });
 
@@ -57,14 +58,14 @@ router.get('/:id',function( req,res) {
 });
 
 //Edit Camp Ground
-router.get('/:id/edit',checkCampGroundOwnerShip,function( req,res ) {	
+router.get('/:id/edit',middleware.checkCampGroundOwnerShip,function( req,res ) {	
 		CampGround.findById(req.params.id,function( error, foundCampGround ){
 			res.render('campgrounds/edit',{campground:foundCampGround});
 		});
 });
 
 //Update Camp Ground
-router.put('/:id',checkCampGroundOwnerShip,function( req,res ){
+router.put('/:id',middleware.checkCampGroundOwnerShip,function( req,res ){
 	//find and update the correct campground.
 	CampGround.findByIdAndUpdate(req.params.id,req.body.campground,function( error, foundCampGround ){
 		if( error ) {
@@ -78,7 +79,7 @@ router.put('/:id',checkCampGroundOwnerShip,function( req,res ){
 });
 
 // Destroy Campground
-router.delete('/:id',checkCampGroundOwnerShip,function ( req, res ) {
+router.delete('/:id',middleware.checkCampGroundOwnerShip,function ( req, res ) {
 	CampGround.findByIdAndRemove(req.params.id, function( error ) {
 		if( error ) {
 			console.log(error);
@@ -88,34 +89,5 @@ router.delete('/:id',checkCampGroundOwnerShip,function ( req, res ) {
 		}
 	});
 });
-
-//define middleware functions
-
-function isLoggedIn( req, res , next) {
-	if( req.isAuthenticated()) {
-		return next();
-	}
-	res.redirect("/login")
-}
-
-function checkCampGroundOwnerShip( req, res, next ){
-	if( req.isAuthenticated()){		
-		CampGround.findById(req.params.id,function( error, foundCampGround ){
-			if( error) {
-				console.log(error);
-				res.redirect("back");
-			} else {
-				//does user own the listing
-				if(foundCampGround.author.id.equals(req.user._id)){
-					next();
-				} else {
-					res.redirect("back");
-				}
-			}
-		});
-	} else {
-		res.redirect("back");
-	}
-}
 
 module.exports = router;

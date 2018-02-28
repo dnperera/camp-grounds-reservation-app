@@ -2,9 +2,9 @@ var express = require('express');
 var router = express.Router({mergeParams:true});
 var Comment = require('../models/comment');
 var CampGround = require('../models/campground');
-
+var middleware = require('../middleware');
 //Comments new
-router.get('/new',isLoggedIn,function( req ,res ) {
+router.get('/new',middleware.isLoggedIn,function( req ,res ) {
 	//find campground by id
 	CampGround.findById(req.params.id,function( error , campground ){
 		if(error) {
@@ -16,7 +16,7 @@ router.get('/new',isLoggedIn,function( req ,res ) {
 });
 
 //Comments create
-router.post('/',isLoggedIn, function (req, res ){
+router.post('/',middleware.isLoggedIn, function (req, res ){
  //find campground by id
  CampGround.findById(req.params.id,function( error , campground ){
  	if( error ) {
@@ -44,7 +44,7 @@ router.post('/',isLoggedIn, function (req, res ){
 });
 
 // Edit comment route
-router.get('/:comment_id/edit',function( req,res ){
+router.get('/:comment_id/edit',middleware.checkCommentOwnerShip,function( req,res ){
 	Comment.findById(req.params.comment_id,function(error ,foundComment ){
 		if( error ) {
 			console.log(error);
@@ -56,7 +56,7 @@ router.get('/:comment_id/edit',function( req,res ){
 });
 
 //Update comment route
-router.put('/:comment_id',function( req,res ){
+router.put('/:comment_id',middleware.checkCommentOwnerShip,function( req,res ){
 	Comment.findByIdAndUpdate(req.params.comment_id,req.body.comment, function( error, updatedComment ){
 		if( error ) {
 			console.log(error);
@@ -68,7 +68,7 @@ router.put('/:comment_id',function( req,res ){
 });
 
 //delete comment
-router.delete('/:comment_id',function(req,res) {
+router.delete('/:comment_id',middleware.checkCommentOwnerShip,function(req,res) {
 	Comment.findByIdAndRemove(req.params.comment_id,function( error ){
 		if(error) {
 			console.log(error);
@@ -78,12 +78,5 @@ router.delete('/:comment_id',function(req,res) {
 		}
 	});
 });
-
-function isLoggedIn( req, res , next) {
-	if( req.isAuthenticated()) {
-		return next();
-	}
-	res.redirect("/login")
-}
 
 module.exports = router;
