@@ -15,20 +15,33 @@ router.get('/',function(req,res){
 });
 
 //Create new campground
-router.post('/',function(req,res){
-	CampGround.create(req.body, function( error, data){
+router.post('/',isLoggedIn,function(req,res){
+	//get data from form and campground object
+	var newCampGround ={
+		name: req.body.name,
+		image: req.body.image,
+		description: req.body.description,
+		author : {
+			id: req.user._id,
+			username: req.user.username
+		}
+	};
+
+	CampGround.create( newCampGround, function( error, newCamp){
 		if( error ) {
 			console.log(error);
 		}else {
+			//Add user details to new camp ground 
+			
 			//redirect back to camp ground page
 			res.redirect("/camp-grounds")
-			console.log(data);
+			console.log(newCamp);
 		}
 	});
 });
 
 // Display the form  to create  new campground
-router.get('/new',function(req,res) {
+router.get('/new',isLoggedIn,function(req,res) {
 	res.render('campgrounds/new')
 });
 
@@ -44,4 +57,10 @@ router.get('/:id',function( req,res) {
 	});
 });
 
+function isLoggedIn( req, res , next) {
+	if( req.isAuthenticated()) {
+		return next();
+	}
+	res.redirect("/login")
+}
 module.exports = router;
