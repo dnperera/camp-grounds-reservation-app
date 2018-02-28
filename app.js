@@ -5,6 +5,7 @@ var mongoose = require('mongoose');
 var passport = require('passport');
 var LocalStrategy = require('passport-local');
 var sessions = require('express-session');
+var methodOverride = require('method-override');
 var User = require('./models/user');
 
 //requiring routes
@@ -19,7 +20,9 @@ mongoose.connect('mongodb://localhost/camp_grounds');
 var port = process.env.PORT || 3000;
 var ip = process.env.IP || '127.0.0.1';
 
-(app.use(bodyParser.urlencoded({extended:true})));
+app.use(bodyParser.urlencoded({extended:true}));
+
+app.use(methodOverride('_method'));
 
 //set the path for the static assets
 app.use(express.static(__dirname+"/public"));

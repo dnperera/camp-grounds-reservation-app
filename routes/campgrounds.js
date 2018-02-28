@@ -31,7 +31,6 @@ router.post('/',isLoggedIn,function(req,res){
 		if( error ) {
 			console.log(error);
 		}else {
-			//Add user details to new camp ground 
 			
 			//redirect back to camp ground page
 			res.redirect("/camp-grounds")
@@ -53,6 +52,31 @@ router.get('/:id',function( req,res) {
 			console.log(error);
 		}else {
 			res.render('campgrounds/show',{campground:data});
+		}
+	});
+});
+
+//Edit Camp Ground
+router.get('/:id/edit', function( req,res ) {
+	CampGround.findById(req.params.id,function( error, foundCampGround ){
+		if( error) {
+			console.log(error);
+			res.redirect("/camp-grounds");
+		} else {
+			res.render('campgrounds/edit',{campground:foundCampGround});
+		}
+	})
+});
+
+//Update Camp Ground
+router.put('/:id',function( req,res ){
+	//find and update the correct campground.
+	CampGround.findByIdAndUpdate(req.params.id,req.body.campground,function( error, foundCampGround ){
+		if( error ) {
+			console.log(error);
+			res.redirect("/camp-grounds");
+		}else{
+			res.redirect("/camp-grounds/"+req.params.id);
 		}
 	});
 });
