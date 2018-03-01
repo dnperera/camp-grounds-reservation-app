@@ -6,19 +6,22 @@ var middlewareObj = {};
 middlewareObj.checkCampGroundOwnerShip = function( req, res, next ){
 	if( req.isAuthenticated()){		
 		CampGround.findById(req.params.id,function( error, foundCampGround ){
-			if( error) {
+			if( !foundCampGround || error) {
 				console.log(error);
+				req.flash("error", "Campground not found.")
 				res.redirect("back");
 			} else {
 				//does user own the listing
 				if(foundCampGround.author.id.equals(req.user._id)){
 					next();
 				} else {
+					req.flash("error", "You are not authorised!.")
 					res.redirect("back");
 				}
 			}
 		});
 	} else {
+		req.flash("error", "You need to be logged in!.")
 		res.redirect("back");
 	}
 };
@@ -26,8 +29,9 @@ middlewareObj.checkCampGroundOwnerShip = function( req, res, next ){
 middlewareObj.checkCommentOwnerShip = function ( req, res, next ){
 	if( req.isAuthenticated()){		
 		Comment.findById(req.params.comment_id,function( error, foundComment ){
-			if( error) {
+			if( error || !foundComment) {
 				console.log(error);
+				req.flash("error","Comment not found!");
 				res.redirect("back");
 			} else {
 				//does user own the listing
@@ -47,6 +51,7 @@ middlewareObj.isLoggedIn = function ( req, res , next) {
 	if( req.isAuthenticated()) {
 		return next();
 	}
+	req.flash("error","You need to be logged in to access!.");
 	res.redirect("/login")
 };
 

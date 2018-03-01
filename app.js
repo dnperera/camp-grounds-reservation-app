@@ -6,6 +6,7 @@ var passport = require('passport');
 var LocalStrategy = require('passport-local');
 var sessions = require('express-session');
 var methodOverride = require('method-override');
+var flash = require('connect-flash');
 var User = require('./models/user');
 
 //requiring routes
@@ -30,6 +31,9 @@ app.use(express.static(__dirname+"/public"));
 //set the view Engine
 app.set("view engine","ejs");
 
+//set flash middle ware 
+app.use(flash());
+
 //--- Set up Passport Configurations
 app.use(sessions({
 	secret:"Madola Multi Plantation,Sri Lanka",
@@ -46,6 +50,8 @@ passport.deserializeUser(User.deserializeUser());
 //add current user object to the express middle ware
 app.use( function ( req, res, next ){
 	res.locals.currentUser = req.user;
+	res.locals.error = req.flash('error');
+	res.locals.success = req.flash('success');
 	next();
 });
 

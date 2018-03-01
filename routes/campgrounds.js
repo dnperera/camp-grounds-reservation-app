@@ -49,8 +49,10 @@ router.get('/new',middleware.isLoggedIn,function(req,res) {
 router.get('/:id',function( req,res) {
 	//get selected campground details with comments
 	CampGround.findById(req.params.id).populate("comments").exec( function ( error ,data) {
-		if( error) {
+		if( error || !data) {
 			console.log(error);
+			req.flash("error", "No mathing campground found!");
+			res.redirect("/camp-grounds")
 		}else {
 			res.render('campgrounds/show',{campground:data});
 		}
@@ -72,7 +74,7 @@ router.put('/:id',middleware.checkCampGroundOwnerShip,function( req,res ){
 			console.log(error);
 			res.redirect("/camp-grounds");
 		}else{
-
+			req.flash("success","Camground details updated successfully!.")
 			res.redirect("/camp-grounds/"+req.params.id);
 		}
 	});
@@ -85,6 +87,7 @@ router.delete('/:id',middleware.checkCampGroundOwnerShip,function ( req, res ) {
 			console.log(error);
 			res.redirect('/camp-grounds');
 		}else {
+			req.flash("success","Camground deleted successfully!.")
 			res.redirect('/camp-grounds');
 		}
 	});

@@ -11,10 +11,12 @@ router.post('/register',function( req,res ){
 	var newUser = new User({username:req.body.username});
 	User.register(newUser,req.body.password,function(error ,newUser){
 		if(error) {
-			console.log(error);
+			//console.log(error);
+			req.flash("error",error.message);
 			return res.render('register');
 		}
 		passport.authenticate("local")(req,res, function(){
+			req.flash("success", "User was created successfully!!!!!!")
 			res.redirect('/camp-grounds');
 		});
 	})
@@ -36,17 +38,8 @@ router.post('/login',passport.authenticate("local",
 
 router.get('/logout',function( req,res ){
 	req.logout();
+	req.flash("success","You successfully logged out!.")
 	res.redirect("/");
 });
-
-//--- End Authincation Routes
-//
-
-function isLoggedIn( req, res , next) {
-	if( req.isAuthenticated()) {
-		return next();
-	}
-	res.redirect("/login")
-}
 
 module.exports = router;
