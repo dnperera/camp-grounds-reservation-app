@@ -11,7 +11,7 @@ router.get('/',function(req,res){
 			res.render("campgrounds/index",{campGrounds:[]});
 			console.log(error);
 		}
-		res.render("campgrounds/index",{campGrounds:data, currentUser:req.user})
+		res.render("campgrounds/index",{campGrounds:data, currentUser:req.user,page:'campgrounds'})
 	});
 });
 

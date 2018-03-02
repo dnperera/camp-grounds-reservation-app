@@ -4,7 +4,7 @@ var passport = require('passport');
 var User = require('../models/user');
 
 router.get( '/register',function ( req,res ){
-	res.render('register');
+	res.render('register',{page:'register'});
 });
 
 router.post('/register',function( req,res ){
@@ -25,7 +25,7 @@ router.post('/register',function( req,res ){
 
 //show login page
 router.get('/login',function( req, res ) {
-	res.render('login');
+	res.render('login',{page:'login'});
 });
 
 //authenticate login details

@@ -62,7 +62,7 @@ app.use(authRoutes);
 app.use("/camp-grounds/:id/comments",commentRoutes);
 app.use("/camp-grounds",campgroundRoutes);
 
-app.listen(process.env.PORT,process.env.PORT,() => {
+app.listen(port,ip,() => {
 	console.log(`Server started listening on port ${port}`);
 });
 
