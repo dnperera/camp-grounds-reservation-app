@@ -16,8 +16,8 @@ var campgroundRoutes = require('./routes/campgrounds');
 var indexRoutes = require('./routes/index');
 
 //connect or create  mongo db 'camp_grounds'
-//mongoose.connect('mongodb://localhost/camp_grounds');
-mongoose.connect('mongodb://dnperera:dphp94903@ds153198.mlab.com:53198/camp_grounds');
+mongoose.connect('mongodb://localhost/camp_grounds');
+//mongoose.connect('mongodb://dnperera:dphp94903@ds153198.mlab.com:53198/camp_grounds');
 //mongodb://dnperera:dphp94903@ds153198.mlab.com:53198/camp_grounds
 var port = process.env.PORT || 3000;
 var ip = process.env.IP || '127.0.0.1';

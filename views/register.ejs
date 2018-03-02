@@ -1,7 +1,7 @@
 <%- include('partials/header') %>
 <div class="row">
-    <h1 id="login-form-heading">Sign Up</h1>
-    <div id="login-form">
+    <h1 id="form-heading">Sign Up</h1>
+    <div id="form">
         <form action="/register" method="post">
             <div class="form-group">
                 <input class="form-control" type="text" name="username" placeholder="username">
@@ -16,10 +16,5 @@
         <a href="/campgrounds">Go Back</a>
     </div>
 </div>
-<!-- <h3>Register to find camp grounds ..</h3>
-<form action="/register" method="POST" >
-	<input type="text" name="username" placeholder="User Name">
-	<input type="password" name="password" placeholder="Password">
-	<button class="btn btn-sm btn-primary">Sign Up</button>
-</form> -->
+
 <%- include('partials/footer') %>

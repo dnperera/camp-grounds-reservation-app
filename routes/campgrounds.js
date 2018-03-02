@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var CampGround = require('../models/campground');
 var middleware = require('../middleware');
+var geocoder = require('geocoder');
 
 //Index route - display all camp grounds
 router.get('/',function(req,res){
@@ -21,21 +22,36 @@ router.post('/',middleware.isLoggedIn,function(req,res){
 	var newCampGround ={
 		name: req.body.name,
 		image: req.body.image,
+		location:req.body.location,
+		cost: req.body.cost,
 		description: req.body.description,
 		author : {
 			id: req.user._id,
 			username: req.user.username
 		}
 	};
-
-	CampGround.create( newCampGround, function( error, newCamp){
-		if( error ) {
+	
+	//Get the geo codes for the location
+	geocoder.geocode(req.body.location,function( error,data ) {
+		if(error || !data) {
+			req.flash( "error", "Invalid Camp Location! ");
 			console.log(error);
-		}else {
-			
-			//redirect back to camp ground page
-			res.redirect("/camp-grounds")
-			console.log(newCamp);
+			return res.redirect('back');
+		} else {
+			 newCampGround.lat = data.results[0].geometry.location.lat;
+			 newCampGround.lng = data.results[0].geometry.location.lng;
+			 newCampGround.location = data.results[0].formatted_address;
+			 // Create a new campground and save to DB
+			 CampGround.create( newCampGround, function( error, newCamp){
+			 	if( error ) {
+			 		console.log(error);
+			 	}else {
+			 		
+			 		//redirect back to camp ground page
+			 		res.redirect("/camp-grounds")
+			 		console.log(newCamp);
+			 	}
+			 });
 		}
 	});
 });

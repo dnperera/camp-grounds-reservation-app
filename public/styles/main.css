@@ -14,11 +14,17 @@
 	display: inline;
 }
 
-#login-form {
+#form {
 	width: 30%;
 	margin: 25px auto;
 }
 
-#login-form-heading {
+#form-heading {
 	text-align: center;
+}
+
+/* Google Maps */
+#map {
+    height: 400px;
+    width: 100%;
 }
