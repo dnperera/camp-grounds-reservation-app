@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "description": "Camp Ground Posting & Reservation App",
   "main": "app.js",
+  "engines": {
+    "node": "8.9.4",
+    "npm": "5.6.x"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node app.js"
@@ -11,15 +15,7 @@
     "type": "git",
     "url": "git+https://github.com/dnperera/Camp-Grounds-Reservation-App.git"
   },
-  "keywords": [
-    "Full",
-    "Stack",
-    "App",
-    "Node",
-    "Js",
-    "Express",
-    "Mongo"
-  ],
+  "keywords": ["Full", "Stack", "App", "Node", "Js", "Express", "Mongo"],
   "author": "Dayan Perera",
   "license": "ISC",
   "bugs": {

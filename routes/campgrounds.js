@@ -84,14 +84,25 @@ router.get('/:id/edit',middleware.checkCampGroundOwnerShip,function( req,res ) {
 
 //Update Camp Ground
 router.put('/:id',middleware.checkCampGroundOwnerShip,function( req,res ){
-	//find and update the correct campground.
-	CampGround.findByIdAndUpdate(req.params.id,req.body.campground,function( error, foundCampGround ){
-		if( error ) {
+	geocoder.geocode(req.body.campground.location,function( error,data ){
+		if(error || !data) {
+			req.flash( "error", "Invalid Camp Location! ");
 			console.log(error);
-			res.redirect("/camp-grounds");
-		}else{
-			req.flash("success","Camground details updated successfully!.")
-			res.redirect("/camp-grounds/"+req.params.id);
+			return res.redirect('back');
+		} else {
+			req.body.campground.lat = data.results[0].geometry.location.lat;
+			req.body.campground.lng = data.results[0].geometry.location.lng;
+
+			//find and update the correct campground.
+			CampGround.findByIdAndUpdate(req.params.id,req.body.campground,function( error, foundCampGround ){
+				if( error ) {
+					console.log(error);
+					res.redirect("/camp-grounds");
+				}else{
+					req.flash("success","Camground details updated successfully!.")
+					res.redirect("/camp-grounds/"+req.params.id);
+				}
+			});
 		}
 	});
 });
